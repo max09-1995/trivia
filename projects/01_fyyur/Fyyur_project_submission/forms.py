@@ -1,8 +1,9 @@
 from datetime import datetime
-from flask_wtf import Form
+from flask_wtf import Form, FlaskForm
 
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, RadioField
-from wtforms.validators import DataRequired, AnyOf, URL, Regexp
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp, ValidationError
+from validators import is_valid_phone
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -84,7 +85,7 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone',validators=[DataRequired(), Regexp('/\d*-\d*-\d*/', message="Please provide a valid phone number")]
+        'phone',validators=[DataRequired()]
     )
    
     # '/\d*-\d*-\d*/'
@@ -119,7 +120,7 @@ class VenueForm(Form):
     )
     facebook_link = StringField(
         
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[URL(message="Provide a proper URL")]
     )
     
     website = StringField(
@@ -134,6 +135,19 @@ class VenueForm(Form):
     seeking_description = StringField(
         'seeking_description',validators=[DataRequired()]
     )
+    
+    def validate(self):
+    #"""Define a custom validate method in your Form."""
+        rv = FlaskForm.validate(self)
+       
+        if not rv:
+            return False
+        if not is_valid_phone(self.phone.data):
+            self.phone.errors.append('Invalid phone.')
+            #print('Validator wird ausgeführt')
+            return False
+        # if pass validation
+        return True
 
 
 class ArtistForm(Form):
