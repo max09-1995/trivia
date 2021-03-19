@@ -85,7 +85,7 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone',validators=[DataRequired()]
+        'phone',validators=[DataRequired(),URL(message="tester")]
     )
    
     # '/\d*-\d*-\d*/'
@@ -136,18 +136,18 @@ class VenueForm(Form):
         'seeking_description',validators=[DataRequired()]
     )
     
-    def validate(self):
+    #def validate(self):
     #"""Define a custom validate method in your Form."""
-        rv = FlaskForm.validate(self)
+     #   rv = FlaskForm.validate(self)
        
-        if not rv:
-            return False
-        if not is_valid_phone(self.phone.data):
-            self.phone.errors.append('Invalid phone.')
+      #  if not rv:
+       #     return False
+        #if not is_valid_phone(self.phone.data):
+         #   self.phone.errors.append('Invalid phone.')
             #print('Validator wird ausgeführt')
-            return False
+          #  return False
         # if pass validation
-        return True
+       # return True
 
 
 class ArtistForm(Form):

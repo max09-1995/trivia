@@ -10,8 +10,8 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
-from flask_wtf import Form
-from forms import *
+from flask_wtf import Form, FlaskForm
+from forms import VenueForm
 from flask_migrate import Migrate
 from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean, BOOLEAN, DateTime
 from datetime import datetime
@@ -135,23 +135,29 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
-
-  try:
-    seeking_talent = False
-    name = request.form['name']
-    city = request.form['city']
-    state = request.form['state']
-    address = request.form['address']
-    phone = request.form['phone']
-    image_link = request.form['image_link']
-    genre = request.form['genres']
-    facebook_link = request.form['facebook_link']
-    website = request.form['website']
-    seeking_talent = request.form['seeking_talent']
-    seeking_description = request.form['seeking_description']
   
-    venue = Venue(name=name, city=city, state=state, address=address, phone=phone,image_link=image_link, facebook_link=facebook_link, genres=genre, seeking_description=seeking_description, website=website,seeking_talent=seeking_talent)
+  form = VenueForm(request.form)
+  
+  try:
+    
+    #seeking_talent = False
+    #name = request.form['name']
+    #city = request.form['city']
+    #state = request.form['state']
+    #address = request.form['address']
+    #phone = request.form['phone']
+    #image_link = request.form['image_link']
+    #genre = request.form['genres']
+    #facebook_link = request.form['facebook_link']
+    #website = request.form['website']
+    #seeking_talent = request.form['seeking_talent']
+    #seeking_description = request.form['seeking_description']
+  
+    #venue = Venue(name=name, city=city, state=state, address=address, phone=phone,image_link=image_link, facebook_link=facebook_link, genres=genre, seeking_description=seeking_description, website=website,seeking_talent=seeking_talent)
+    
+    venue = Venue()
 
+    form.populate_obj(venue)
 
     db.session.add(venue)
     
@@ -380,6 +386,7 @@ def create_artist_form():
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
  
+  
   try:
     
     seeking_venue= False
