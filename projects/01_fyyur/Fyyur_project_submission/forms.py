@@ -85,10 +85,8 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone',validators=[DataRequired(),URL(message="tester")]
+        'phone',validators=[DataRequired(), Regexp('([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$', message="not a valid phone number")]
     )
-   
-    # '/\d*-\d*-\d*/'
 
     image_link = StringField(
         'image_link',validators=[DataRequired(),URL()]
@@ -120,7 +118,7 @@ class VenueForm(Form):
     )
     facebook_link = StringField(
         
-        'facebook_link', validators=[URL(message="Provide a proper URL")]
+        'facebook_link', validators=[DataRequired(), URL()]
     )
     
     website = StringField(
@@ -135,19 +133,6 @@ class VenueForm(Form):
     seeking_description = StringField(
         'seeking_description',validators=[DataRequired()]
     )
-    
-    #def validate(self):
-    #"""Define a custom validate method in your Form."""
-     #   rv = FlaskForm.validate(self)
-       
-      #  if not rv:
-       #     return False
-        #if not is_valid_phone(self.phone.data):
-         #   self.phone.errors.append('Invalid phone.')
-            #print('Validator wird ausgeführt')
-          #  return False
-        # if pass validation
-       # return True
 
 
 class ArtistForm(Form):
@@ -215,7 +200,7 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # implement validation logic for state
-        'phone',validators=[DataRequired()]
+        'phone',validators=[DataRequired(),Regexp('([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$', message="not a valid phone number")]
     )
     image_link = StringField(
         'image_link',validators=[DataRequired()]
@@ -247,7 +232,7 @@ class ArtistForm(Form):
     )
     facebook_link = StringField(
         # implement enum restriction
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[DataRequired(),URL()]
     )
     website = StringField(
         'website',validators=[DataRequired(), URL()]
