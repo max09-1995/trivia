@@ -23,7 +23,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //TODO: update request URL
+      url: `/questions?page=${this.state.page}`, 
       type: "GET",
       success: (result) => {
         this.setState({
@@ -60,8 +60,8 @@ class QuestionView extends Component {
 
   getByCategory= (id) => {
     $.ajax({
-      url: `/categories/${id}/questions`, //TODO: update request URL
-      type: "GET",
+      url: `/question/category/${id}`, //Testing missing; adjusted from get to Post request
+      type: "POST",
       success: (result) => {
         this.setState({
           questions: result.questions,
@@ -78,7 +78,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions/search`, 
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
@@ -94,6 +94,7 @@ class QuestionView extends Component {
           currentCategory: result.current_category })
         return;
       },
+
       error: (error) => {
         alert('Unable to load questions. Please try your request again')
         return;
@@ -103,10 +104,22 @@ class QuestionView extends Component {
 
   questionAction = (id) => (action) => {
     if(action === 'DELETE') {
+
       if(window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //TODO: update request URL
+         // url: `/question/delete/${id}`, //Testing DONE
+          url: `/question/delete`, //Testing DONE
+          
           type: "DELETE",
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify({
+              id: id
+          }),
+          xhrFields: {
+            withCredentials: true
+          },
+          crossDomain: true,
           success: (result) => {
             this.getQuestions();
           },
@@ -128,6 +141,7 @@ class QuestionView extends Component {
             {Object.keys(this.state.categories).map((id, ) => (
               <li key={id} onClick={() => {this.getByCategory(id)}}>
                 {this.state.categories[id]}
+                
                 <img className="category" src={`${this.state.categories[id]}.svg`}/>
               </li>
             ))}

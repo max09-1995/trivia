@@ -98,3 +98,182 @@ createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
+
+## API Documentation
+
+
+GET '/categories'
+- Fetches a dictionary of categories.
+- Request Arguments: None
+- Returns: An object including a dictionary including all availble categories.
+{
+    "categories": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ]
+}
+
+
+GET '/questions'
+
+- Fetches a dictionary of categories, the number of totalquestions and a dictionary of questions. Each question contains the attribute answer, category, difficulty, id and the question itself.
+- Request Arguments: None
+- Returns: A dictionary of categories, questions and a integer value for the number of questions in the dictionary questions.
+{
+    "categories": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ],
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+            "answer": "Apollo 13",
+            "category": 5,
+            "difficulty": 4,
+            "id": 2,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "Tom Cruise",
+            "category": 5,
+            "difficulty": 4,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+    ],
+    "totalquestions": 4
+}
+
+POST '/questions/search'
+
+- Fetches a dictionary of questions that are matching the search criteria. Further the amount of total questions is returned.
+- Request Arguments: A searchTerm needs to be sent:
+    {"searchTerm":"Cassius Clay"}
+- Returns: An object with the currentCategory, all questions in an dictionary that are matching to the searchTerm in a dictionary and the totalQuestions.
+{
+    "currentCategory": 4,
+    "questions": [
+        {
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        }
+    ],
+    "totalQuestions": 1
+}
+
+DELETE '/question/delete'
+
+- Deletes the row of the question with the specified id in the database
+- Request Arguments: The ID of the question needs to be specified
+    {"id":"10"}
+- Returns: Returns the status code and success of the request.
+    {
+    "status_code": 200,
+    "successfull": true
+    }
+
+POST '/question/create'
+
+- Creates a new question in the database for the specified parameters
+- Request Arguments: The question, answer, category and difficulty needs to be sent as JSON:
+    {
+    "question":"Add the question here",
+    "answer":"Add the answer over here",
+    "category": "4",
+    "difficulty":"2"
+}
+- Returns: Returns the status code and success of the request.
+{
+    "status_code": 200,
+    "successfull": true
+}
+
+POST '/question/<id>'
+
+- Fetches a dictionary of a question for the specified id
+- Request Arguments: The id needs to be defined in the URL
+- Returns: An object with the answer, question, category and difficulty is returned
+[
+    {
+        "answer": "George Washington Carver",
+        "category": 4,
+        "difficulty": 2,
+        "question": "Who invented Peanut Butter?"
+    }
+]
+
+POST '/question/category/<category>'
+
+- Fetches a dictionary of all questions for the specified category
+- Request Arguments: The category needs to be defined in the URL
+- Returns: An object with the currentCategory, all questions in a dictionary of the specified category and the totalQuestions.
+
+{
+    "currenCategory": "2",
+    "questions": [
+        {
+            "answer": "Lake Victoria",
+            "category": 3,
+            "difficulty": 2,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": 3,
+            "difficulty": 3,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        },
+        {
+            "answer": "Agra",
+            "category": 3,
+            "difficulty": 2,
+            "question": "The Taj Mahal is located in which Indian city?"
+        }
+    ],
+    "totalQuestions": 3
+}
+
+POST '/play/quiz'
+
+- Fetches the next question for the quiz
+- Request Arguments: The previous questions need to defined in a dictionary object. Further the category needs to be defined. If "All" is selected the type is called "click", all others are named according to the categories defined in the get category call.
+{
+    "previous_questions":[1,2,3],
+    "quiz_category":{
+        "type":"click"
+    }
+
+}
+- Returns: An dictionary object including question, answer, category, difficulty and id 
+
+{
+    "question": {
+        "answer": "Muhammad Ali",
+        "category": 4,
+        "difficulty": 1,
+        "id": 9,
+        "question": "What boxer's original name is Cassius Clay?"
+    }
+}
